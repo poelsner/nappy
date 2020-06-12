@@ -61,7 +61,8 @@ class AircraftData:
         including the flag values  specified in flagsToUse (defaults are 0 and 1).
         """
         if samplingRate!=1:
-            raise "Sampling rates of values other than 1Hz are not yet supported."
+            raise BaseException("Sampling rates of values other than 1Hz are "
+                                "not yet supported.")
         maskedArray=self._getMaskedArray(var[:,0](squeeze=1), flagVar[:,0](squeeze=1), flagsToUse)
         # Now re-construct variable axes etc
         newTimeAxis=self._flatten2DTimeAxis(timeVar, samplingRate)
@@ -96,7 +97,8 @@ class AircraftData:
                         newArray[t0]=maskedArray.fill_value()
         
                 else:
-                    raise "Averaging for non 1Hz sampling rates not yet supported!"
+                    raise BaseException("Averaging for non 1Hz sampling rates "
+                                        "not yet supported!")
 
         # Now re-construct variable axes etc
         newTimeAxis=self._flatten2DTimeAxis(timeVar, samplingRate)
@@ -109,7 +111,8 @@ class AircraftData:
         Returns a flattened 2D time axis.
         """
         if samplingRate!=1:
-            raise "Cannot yet deal with sub-sampling to non 1Hz sampling rates!"
+            raise BaseException("Cannot yet deal with sub-sampling to non "
+                                "1Hz sampling rates!")
 
         timevalues=timevar._data
         timeunit=timevar.units

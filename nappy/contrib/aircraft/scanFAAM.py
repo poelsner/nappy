@@ -38,7 +38,8 @@ def scanFAAM(fileName=None, vars=None, nth=4, missingValuesToUse=(-9999., -32767
     end=None
 
     if not fileName and not vars:
-        raise "You must provide either a file name or a list of cdms variables."
+        raise BaseException("You must provide either a file name or a list "
+                            "of cdms variables.")
     
     if fileName:
         f=cdms.open(fileName)
