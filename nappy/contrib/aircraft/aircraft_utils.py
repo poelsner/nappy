@@ -45,10 +45,10 @@ def flatten2DTimeData(var, time_var):
 
     atts = var.attributes
     newAtts = {}
-    for att,value in atts.items():
+    for att,value in list(atts.items()):
         if type(value) in (type((1,1)), type([1,2]), type(Numeric.array([1.]))) and len(value) == 1:
             value = value[0]
-        if type(value) in (type(1), type(1.), type(long(1))):
+        if type(value) in (type(1), type(1.), type(int(1))):
             newAtts[att] = value
         elif type(value) == type("string"):
             newAtts[att] = value.strip()

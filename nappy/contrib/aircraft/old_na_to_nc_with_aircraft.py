@@ -72,7 +72,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
     # VNAME strings - var names.
     outputMessage=[]
     msg="Reading data from: %s\n" % infilename
-    print msg
+    print(msg)
     outputMessage.append(msg)
     cdmsfile=cdms.open(infilename)
     globals=cdmsfile.attributes
@@ -121,7 +121,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
     builtNADicts=[[builder.na_dict, builder.varIDs]]
     if builder.varIDs==None:
         msg="\nNo files created after variables parsed."
-        print msg
+        print(msg)
         outputMessage.append(msg)
         return outputMessage
 
@@ -147,7 +147,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
         return fileNames
 	 	
     msg="\n%s files to write" % len(builtNADicts)
-    print msg
+    print(msg)
     outputMessage.append(msg)
 
     count=1
@@ -164,11 +164,11 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
 	    newname=outfilenames[count-1]
  
 	msg="\nWriting output NASA Ames file: %s" % newname
-	print msg
+	print(msg)
 	outputMessage.append(msg)
 	
 	builtNADict=i[0]
-	for key in naVars.keys():
+	for key in list(naVars.keys()):
 	    if key in allowedOverwriteMetadata:
 	    
 	        if key in arrayArgs:
@@ -179,7 +179,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
 		if newItem!=builtNADict[key]:
 		    builtNADict[key]=newItem
 		    msg="Metadata overwritten in output file: '%s' is now '%s'" % (key, builtNADict[key])
-		    print msg
+		    print(msg)
 		    outputMessage.append(msg)
         
         fileList=[]
@@ -211,7 +211,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
                 fileList.append(newnamePlusLetter)
                 general.openNAFile(newnamePlusLetter, 'w', NADictCopy, delimiter=delimiter, float_format=float_format)
                 msg="\nOutput files split on size limit: %s\nFilename used: %s" % (sizeLimit, newnamePlusLetter)
-                print msg
+                print(msg)
                 outputMessage.append(msg)
                 letterCount=letterCount+1
                 start=end
@@ -221,7 +221,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
    	    general.openNAFile(newname, 'w', builtNADict, delimiter=delimiter, float_format=float_format)
 
 	msg="\nWrote the following variables:"+"\n\t"+("\n\t".join(i[1][0]))
-	print msg
+	print(msg)
 	outputMessage.append(msg)
 	
 	if len(i[1][1])>0:
@@ -240,7 +240,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
             count=count+1
         ncount=ncount+1
 
-	print msg
+	print(msg)
 	outputMessage.append(msg)
 	    
     if (count-1)==1:
@@ -248,7 +248,7 @@ def cdms2na(ncfile, na_file_names, naVars={}, variables=None, nFilesOnly="no",
     else:
         plural="s"	      
     msg="\n%s file%s written." % ((count-1), plural)
-    print msg
+    print(msg)
     outputMessage.append(msg)
     return outputMessage
 
@@ -308,7 +308,7 @@ class NAContentCollector(NACore):
 	count=0
 	for var in self.vars:
 	    msg="Analysing: %s" % var.id
-	    print msg
+	    print(msg)
 	    self.outputMessage.append(msg)
 	    count=count+1
 
@@ -339,7 +339,7 @@ class NAContentCollector(NACore):
 	
 	if len(self.rankZeroVars)==len(self.vars):  return (None, None)
 	if not bestVar:  
-            print "No variables produced"
+            print("No variables produced")
             return (None, None)
 
         vars4NA=[bestVar]
@@ -354,7 +354,7 @@ class NAContentCollector(NACore):
         elif ndims>4:
             raise "Cannot write variables defined against greater than 4 axes in NASA Ames format."
         else:
-            if len(auxVars4NA)>0 or (self.na_dict.has_key("NAUXV") and self.na_dict["NAUXV"]>0):
+            if len(auxVars4NA)>0 or ("NAUXV" in self.na_dict and self.na_dict["NAUXV"]>0):
                 self.na_dict["FFI"]=1010
             else:
                 self.na_dict["FFI"]=1001
@@ -447,7 +447,7 @@ class NAContentCollector(NACore):
             name=getBestName(var)
             self.na_dict["VNAME"].append(name)
             miss=getMissingValue(var)
-            if type(miss) not in (float, int, long):  miss=miss[0]
+            if type(miss) not in (float, int, int):  miss=miss[0]
             self.na_dict["VMISS"].append(miss)
             #print self.na_dict["VMISS"]
             self.na_dict["VSCAL"].append(1)
@@ -459,7 +459,7 @@ class NAContentCollector(NACore):
             #listOfListsCreator(inlist, var.shape)
             #arrayToList(var, inlist)
 
-            if not self.na_dict.has_key("X"):
+            if "X" not in self.na_dict:
                 self.na_dict["NXDEF"]=[]
                 self.na_dict["NX"]=[]
                 # Create independent variable information
@@ -550,15 +550,15 @@ class NAContentCollector(NACore):
         globalmap=cdmsMap.toNA
 	# Check if we should add to it with locally set rules
 	locGlobs=localRules.localGlobalAttributes
-        for att in locGlobs.keys():
-	    if not globalmap.has_key(att):
+        for att in list(locGlobs.keys()):
+	    if att not in globalmap:
 	        globalmap[key]=locGlobs[key]
 
         self.extra_comments=[[],[],[]]  # Normal comments, special comments, other comments
 	conventionOrReferenceComments=[]
-        for key in self.globals.keys():
+        for key in list(self.globals.keys()):
             if key!="first_valid_date_of_data" and type(self.globals[key]) not in (str, float, int): continue
-            if key in globalmap.keys():
+            if key in list(globalmap.keys()):
                 if key=="history":
                     timestring=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
                     history="History:\t%s - Converted to NASA Ames format using nappy-%s.\n\t%s" % (timestring, version.version, self.globals[key])
@@ -676,7 +676,7 @@ class NAContentCollector(NACore):
 	rankZeroVarsString=[]
 	for var in self.rankZeroVars:
 	    rankZeroVarsString.append("\tVariable %s: %s" % (var.id, getBestName(var)))
-	    for att in var.attributes.keys():
+	    for att in list(var.attributes.keys()):
 	        value=var.attributes[att]
 		if type(value) in (str, float, int):
 		    rankZeroVarsString.append("\t\t%s = %s" % (att, var.attributes[att]))
@@ -689,7 +689,7 @@ class NAContentCollector(NACore):
         for var in self.orderedVars:
             varflag="unused"
             name=getBestName(var)
-            for scom,value in var.attributes.items():
+            for scom,value in list(var.attributes.items()):
                 if type(value) in (type([]), type(Numeric.array([0]))) and len(value)==1:
                     value=value[0]
                 if type(value) in (str, float, int) and scom not in used_var_atts:
@@ -754,7 +754,7 @@ class NAContentCollector(NACore):
 	"""
 	# Check if DATE field previously known in NASA Ames file
 	time_now=time.strftime("%Y %m %d", time.localtime(time.time())).split()
-	if not self.na_dict.has_key("RDATE"):
+	if "RDATE" not in self.na_dict:
 	    self.na_dict["RDATE"]=time_now
 	
         if self.ax0.isTime():
@@ -766,18 +766,18 @@ class NAContentCollector(NACore):
                 self.na_dict["DATE"]=string.replace(str(first_day).split(" ")[0], "-", " ").split()
 	    except:
 	        msg="Nappy Warning: Could not get the first date in the file. You will need to manually edit the output file."
-		print msg
+		print(msg)
 		self.outputMessage.append(msg)
 		self.na_dict["DATE"]=("DATE", "NOT", "KNOWN")
         else: 
-            if not self.na_dict.has_key("DATE"):
+            if "DATE" not in self.na_dict:
 	        msg="Nappy Warning: Could not get the first date in the file. You will need to manually edit the output file."
-		print msg
+		print(msg)
 		self.outputMessage.append(msg)
 	        self.na_dict["DATE"]=("DATE", "NOT", "KNOWN")
         self.na_dict["IVOL"]=1
         self.na_dict["NVOL"]=1
-        for key in header_items.keys():
+        for key in list(header_items.keys()):
              self.na_dict[key]=header_items[key]
         return
 
@@ -801,7 +801,7 @@ class NAContentCollector(NACore):
             if rule[2]=="flag":
                 # Only use flag var for processing real variable
                 if var.id.strip()[-4:]=="FLAG": 
-                    print "Ignore flag: %s" % var.id
+                    print("Ignore flag: %s" % var.id)
                     return None 
 
                 flagID=var.id.strip()+"FLAG"

@@ -78,10 +78,10 @@ def chooseFFI(na_dict):
             return 2010
 
     elif d["NIV"] == 1:   # 1 independent variable 
-        if not d.has_key("NAUXV"):
+        if not "NAUXV" in d:
             # 1001 - No auxiliary variables
             return 1001
-        elif d.has_key("NVPM"):
+        elif "NVPM" in d:
             # 1020 - Implied values for independent variable
             return 1020
         else:
@@ -111,7 +111,7 @@ def modifyNADictCopy(indict, v_new, start, end, ivol, nvol):
     Returns a copy of a dictionary with some modifications.
     """
     newDict = {}
-    for key,value in indict.items(): 
+    for key,value in list(indict.items()): 
         if key == "X":
             newlist = indict["X"][start:end]
             newDict["X"] = newlist

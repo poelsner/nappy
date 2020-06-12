@@ -137,7 +137,7 @@ class NAFile(nappy.na_file.na_core.NACore):
         of NASA Ames internal variables. These are saved as instance attributes
         with the name used in the NASA Ames documentation.
         """
-        for i in self.na_dict.keys():
+        for i in list(self.na_dict.keys()):
             setattr(self, i, self.na_dict[i])
 
     def _readTopLine(self):

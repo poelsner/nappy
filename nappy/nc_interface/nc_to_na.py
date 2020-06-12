@@ -115,7 +115,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
 
                     cdms_variables.append(var)
 
-        globals = fin.attributes.items()
+        globals = list(fin.attributes.items())
         return (cdms_variables, globals) 
 
     def constructNAFileNames(self, na_file=None):
@@ -177,7 +177,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
 
         # define final override list by using defaults then locally provided changes
         overriders = local_na_atts
-        for (okey, ovalue) in self.na_items_to_override.items():
+        for (okey, ovalue) in list(self.na_items_to_override.items()):
             overriders[okey] = ovalue
 
         # Now loop through writing the outputs
@@ -191,7 +191,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
             (this_na_dict, vars_to_write) = na_dict_and_var_ids
 
             # Override content of NASA Ames if they are permitted
-            for key in overriders.keys():
+            for key in list(overriders.keys()):
 
                 if key in permitted_overwrite_metadata:    
                     if key in items_as_lists:
@@ -217,7 +217,7 @@ class NCToNA(nappy.nc_interface.cdms_to_na.CDMSToNA):
                         this_na_dict[key] = comments_list
                         this_na_dict["N%sL" % key] = len(comments_list)
 		    	 
-                    elif not this_na_dict.has_key(key) or new_item != this_na_dict[key]:
+                    elif key not in this_na_dict or new_item != this_na_dict[key]:
                         this_na_dict[key] = new_item
                         msg = "Metadata overwritten in output file: '%s' is now '%s'" % (key, this_na_dict[key])
                         if DEBUG: log.debug(msg)

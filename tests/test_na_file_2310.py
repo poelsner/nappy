@@ -37,19 +37,19 @@ class NAFile2310_TestCase(unittest.TestCase):
         "Tests writing FFI 2310."
         fobj = nappy.openNAFile(self.outfile, mode="w", na_dict=self.na_dict)		
         fobj.write()
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
 
     def test_writeCSV2310(self):
         "Tests conversion to CSV."
         fobj = nappy.openNAFile(self.out_csv, mode="w", na_dict=self.na_dict)
         fobj.write(delimiter=",", float_format="%.6f")
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
 
     def test_writeAnnotatedCSV2310(self):
         "Tests conversion to Annotated CSV."
         fobj = nappy.openNAFile(self.out_csv_annotated, mode="w", na_dict=self.na_dict)
         fobj.write(delimiter=",", annotation=True)
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
  
     def test_compareFiles2310(self):
         "Tests comparison of written and original files for equivalence."

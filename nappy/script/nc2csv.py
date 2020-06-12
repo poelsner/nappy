@@ -42,7 +42,7 @@ import sys
 import getopt
 
 # Import from nappy package
-import nc2na
+from . import nc2na
 
 # Uses nc2na(...) directly
 

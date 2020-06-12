@@ -50,7 +50,7 @@ class NACore:
             dct[key] = getattr(self, key)
 
         self.na_dict={}
-        for i in dct.keys():
+        for i in list(dct.keys()):
             if dct[i] != None:
                 self.na_dict[i] = dct[i]
         return self.na_dict

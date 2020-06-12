@@ -14,7 +14,7 @@ import sys
 if sys.version_info.major > 2:
     from configparser import RawConfigParser as ConfigParser
 else:
-    from ConfigParser import ConfigParser
+    from configparser import ConfigParser
 
 
 # Global variables
@@ -132,7 +132,7 @@ def getLocalAttributesConfigDict():
 
 if __name__=="__main__":
 
-    print(getConfigDict())
-    print(getAnnotationsConfigDict())
-    print(getLocalAttributesConfigDict())
+    print((getConfigDict()))
+    print((getAnnotationsConfigDict()))
+    print((getLocalAttributesConfigDict()))
 

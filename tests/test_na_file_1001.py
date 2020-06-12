@@ -37,19 +37,19 @@ class NAFile1001_TestCase(unittest.TestCase):
         "Tests writing FFI 1001."
         fobj = nappy.openNAFile(self.outfile, mode="w", na_dict=self.na_dict)		
         fobj.write()
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
 
     def test_writeCSV1001(self):
         "Tests conversion to CSV."
         fobj = nappy.openNAFile(self.out_csv, mode="w", na_dict=self.na_dict)
         fobj.write(delimiter=",", float_format="%.6f")
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
 
     def test_writeAnnotatedCSV1001(self):
         "Tests conversion to Annotated CSV."
         fobj = nappy.openNAFile(self.out_csv_annotated, mode="w", na_dict=self.na_dict)
         fobj.write(delimiter=",", annotation=True)
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
  
     def test_compareFiles1001(self):
         "Tests comparison of written and original files for equivalence."
@@ -71,7 +71,7 @@ class NAFile1001_TestCase(unittest.TestCase):
         foutname = os.path.join(test_outputs, "test_1001_cb_rewritten.na")
         fobj = nappy.openNAFile(foutname, mode="w", na_dict=na_dict)
         fobj.write()
-        self.failUnless(isinstance(fobj, nappy.na_file.na_file.NAFile))
+        self.assertTrue(isinstance(fobj, nappy.na_file.na_file.NAFile))
 
 if __name__ ==  "__main__":
 

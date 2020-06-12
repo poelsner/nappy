@@ -90,7 +90,7 @@ class NADictToCdmsObjects:
 
         # Check if we have capability to convert this FFI
         if self.na_file_obj.FFI in (2110, 2160, 2310): 
-	        raise Exception("Cannot convert NASA Ames File Format Index (FFI) " + `self.na_file_obj.FFI` + " to CDMS objects. No mapping implemented yet.")
+	        raise Exception("Cannot convert NASA Ames File Format Index (FFI) " + repr(self.na_file_obj.FFI) + " to CDMS objects. No mapping implemented yet.")
 
         self.output_message = []  # for output displaying message
         self.converted = False
@@ -134,7 +134,7 @@ class NADictToCdmsObjects:
         """
         glob_atts = dict(self.global_attributes)
         
-        for key in na_to_nc_map.keys():
+        for key in list(na_to_nc_map.keys()):
 
             if type(key) == type((1,2)):
 
@@ -201,7 +201,7 @@ class NADictToCdmsObjects:
             new_atts.append( (key, glob_atts[key]) )
         used_keys = [i[0] for i in new_atts]
 
-        for key in glob_atts.keys():
+        for key in list(glob_atts.keys()):
             if key not in used_keys:
                 new_atts.append( (key, glob_atts[key]) )
 
@@ -257,7 +257,7 @@ class NADictToCdmsObjects:
             var.id="naVariable_%s" % (var_number)
         
 	     # Check if mapping provided for renaming this variable
-        if var_name in self.rename_variables.keys():
+        if var_name in list(self.rename_variables.keys()):
             var_name = self.rename_variables[var_name]
 	    
         var.long_name = var.name = var.title = var_name
@@ -316,7 +316,7 @@ class NADictToCdmsObjects:
             var.id = "naAuxVariable_%s" % (avar_number)
 
 	    # Check if mapping provided for renaming this variable
-        if var_name in self.rename_variables.keys():
+        if var_name in list(self.rename_variables.keys()):
             var_name = self.rename_variables[var_name]
 
         var.long_name = var.name = var.title = var_name
@@ -366,7 +366,7 @@ class NADictToCdmsObjects:
             if re.search(axis_type, var_name, re.IGNORECASE):
                 axis.standard_name = axis.id = axis_type
                 # Designate it CF-style if known axis type (e.g. axis.designateTime() etc..)
-                exec "axis.designate%s()" % axis_type.title()
+                exec("axis.designate%s()" % axis_type.title())
 
         # Check warning for time units pattern
         if axis.isTime() and (not hasattr(axis, "units") or not time_units_pattn.match(axis.units)):
@@ -377,7 +377,7 @@ class NADictToCdmsObjects:
                     message = time_units_warning_message			    
                     if self.time_warning:
                         log.debug(message)
-                        time_units_input = raw_input("Please insert your time unit string here (or leave blank):").strip()
+                        time_units_input = input("Please insert your time unit string here (or leave blank):").strip()
                     else: 
                         time_units_input = ""
 

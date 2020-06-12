@@ -52,7 +52,7 @@ if __name__ == "__main__":
     """.split("\n")
 
     for line in test_lines:
-        print("INPUT:  %s" % line)
-        print("OUTPUT: %s" % rightStripCurlyBraces(line))
+        print(("INPUT:  %s" % line))
+        print(("OUTPUT: %s" % rightStripCurlyBraces(line)))
 
 
